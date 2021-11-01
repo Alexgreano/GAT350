@@ -9,5 +9,5 @@ class Tracer {
 public:
 	void Trace(const ColorBuffer& colorBuffer, Scene* scene, Camera* camera);
 public:
-	int samples = 2;
+	int samples = 20;
 };

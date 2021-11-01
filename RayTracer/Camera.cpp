@@ -36,16 +36,16 @@ glm::vec2 Camera::ScreenToViewport(const glm::vec2& screen)
 	viewport.y = screen.y / (float)screenSize.y;
 
 
-	return glm::vec2();
+	return viewport;
 }
 
 ray_t Camera::ViewportToRay(const glm::vec2& viewport)
 {
+	//glm::vec3 random = 
 	ray_t ray;
-	ray.origin = eye;
 	
+	ray.origin = eye;
 	ray.direction = lowerLeft + (viewport.x * horizontal) + (viewport.y * vertical) - eye;
 
-
-	return ray_t();
+	return ray;
 }
