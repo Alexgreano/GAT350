@@ -1,7 +1,9 @@
 #include "Scene.h"
 
-glm::vec3 Scene::Trace(const ray_t& ray, float tMin, float tMax, raycastHit_t& hit)
+glm::vec3 Scene::Trace(const ray_t& ray, float tMin, float tMax, raycastHit_t& hit, int depth)
 {
+    if (depth <= 0) return glm::vec3{ 0,0,0 };
+
     float tClosest = tMax;
     bool rayHit = false;
     for (auto& object : objects)
@@ -13,27 +15,13 @@ glm::vec3 Scene::Trace(const ray_t& ray, float tMin, float tMax, raycastHit_t& h
         }
     }
 
-    /*if (rayHit)
-    {
-        ray_t newRay{ hit.point, hit.normal };
-        return { Trace(newRay, tMin, tMax, hit) * 0.5f };
-    }*/
-
-    /*if (rayHit)
-    {
-        glm::vec3 target = hit.point + hit.normal + randomInUnitSphere();
-        glm::vec3 direction = glm::normalize(target - hit.point);
-        ray_t newRay{ hit.point, direction };
-        return { Trace(newRay, tMin, tMax, hit) * 0.5f };
-    }*/
-
     if (rayHit)
     {
         ray_t scattered;
         glm::vec3 attenuation;
 
         if (hit.material->Scatter(ray, hit, attenuation, scattered)) {
-            return attenuation * Trace(scattered, tMin, tMax, hit);
+            return attenuation * Trace(scattered, tMin, tMax, hit, depth -1);
         }
         else {
             return{ 0,0,0 };
@@ -41,10 +29,10 @@ glm::vec3 Scene::Trace(const ray_t& ray, float tMin, float tMax, raycastHit_t& h
     
     }
 
-
+    // sky
     glm::vec3 direction = glm::normalize(ray.direction);
     float t = (direction.y + 1) * 0.5f;
-    return glm::lerp(glm::vec3(0.5f, 0.7f, 1.0f), glm::vec3(1, 1, 1), t);
+    return glm::lerp(glm::vec3(1,1,1), glm::vec3(0.5f, 0.7f, 1), t);
 }
 
 
