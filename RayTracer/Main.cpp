@@ -49,6 +49,9 @@ int main(int, char**)
 	float focalLength = glm::length(eye - lookAt);
 	std::unique_ptr<Camera> camera = std::make_unique<Camera>(eye, lookAt, glm::vec3{ 0, 1, 0 }, 90.0f, glm::ivec2{ framebuffer->colorBuffer.width, framebuffer->colorBuffer.height }, 0.2f, focalLength);
 
+	//light
+	scene->Add(std::move(std::make_unique<Sphere>(glm::vec3{ 0, 20, 0 }, 10.0f, std::make_shared<Emissive>(glm::vec3{ 10, 10, 10 }))));
+
 	//render image
 	framebuffer->Clear({ 0,0,0,0 });
 	tracer->Trace(framebuffer->colorBuffer, scene.get(), camera.get());

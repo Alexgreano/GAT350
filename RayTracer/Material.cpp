@@ -59,3 +59,4 @@ bool Dielectric::Scatter(const ray_t& ray, const raycastHit_t& hit, glm::vec3& a
 
     return true;
 }
+
