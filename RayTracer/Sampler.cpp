@@ -1,7 +1,7 @@
 #include "Sampler.h"
 
 glm::vec3 CheckerSampler::value(const glm::vec2& uv, const glm::vec3& p) const {
-	auto sines = sin(scale * p.x) * sin(scale * p.y) * sin(scale * p.z);
+	auto sines = sin(scale * p.x * glm::pi<float>()) * sin(scale * p.y * glm::pi<float>()) * sin(scale * p.z * glm::pi<float>());
 	return (sines < 0) ? odd->value(uv, p) : even->value(uv, p);
 }
 

@@ -1,15 +1,16 @@
 #include "Tracer.h"
 #include "ColorBuffer.h"
+#include "Buffer.h"
 #include "Scene.h"
 #include <iostream>
 
-void Tracer::Trace(const ColorBuffer& colorBuffer, Scene* scene, Camera* camera)
+void Tracer::Trace(Buffer* buffer, Scene* scene, Camera* camera, const std::string& messages)
 {
-	float aspectRatio = (colorBuffer.width / (float)colorBuffer.height);
+	float aspectRatio = (buffer->width / (float)buffer->height);
 	float invSamples = 1.0f / samples;
 
-	for (int y = 0; y < colorBuffer.height; y++) {
-		for (int x = 0; x < colorBuffer.width; x++) {
+	for (int y = 0; y < buffer->height; y++) {
+		for (int x = 0; x < buffer->width; x++) {
 			glm::vec3 color = { 0,0,0 };
 
 			for (int sample = 0; sample < samples; sample++) {
@@ -21,12 +22,10 @@ void Tracer::Trace(const ColorBuffer& colorBuffer, Scene* scene, Camera* camera)
 				raycastHit_t hit;
 				color += scene->Trace(ray, 0.001f, FLT_MAX, hit,depth);
 			}
-			color.r = sqrt(color.r * invSamples);
-			color.g = sqrt(color.g * invSamples);
-			color.b = sqrt(color.b * invSamples);
-
-			colorBuffer.SetColor(x, y, Vec3ToColor(color));
+			buffer->Add(x, y, color);
 		}
+		system("CLS");
+		std::cout << messages << std::endl;
 		std::cout << y << std::endl;
 	}
 }
